@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christentum Quiz – Religionskunde KSM</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --t1:#1A3F6E; --t1l:#DCE8F5; --t2:#1E5C1E; --t2l:#D4EDD4;
+  --t3:#7A1E1E; --t3l:#F5D5D5; --t4:#7A5000; --t4l:#FAF0DC;
+  --bg:#F5F1EB; --card:#FFFFFF; --text:#1A1A1A; --sub:#666;
+  --radius:12px; --shadow:0 3px 20px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;
+  background-image:radial-gradient(ellipse at 10% 10%,#E8EFF8 0%,transparent 55%),radial-gradient(ellipse at 90% 90%,#EDE8E0 0%,transparent 55%);}
+
+.topbar{background:#fff;border-bottom:1px solid #E0DAD2;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
+.logo{font-family:'Lora',serif;font-size:1.05rem;color:var(--t1);font-weight:700;}
+.logo span{font-weight:400;color:var(--sub);font-size:.85rem;display:block;}
+.pbar-wrap{flex:1;max-width:240px;margin:0 1.5rem;}
+.pbar{height:5px;background:#E0DAD2;border-radius:99px;overflow:hidden;}
+.pfill{height:100%;border-radius:99px;transition:width .4s;background:var(--ac,#1A3F6E);}
+.plbl{font-size:.7rem;color:var(--sub);margin-top:3px;text-align:right;}
+.joker-bar{display:flex;gap:6px;}
+.jbtn{padding:5px 12px;font-size:.75rem;font-weight:600;border-radius:99px;border:1.5px solid #DDD;background:#fff;cursor:pointer;color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s;}
+.jbtn:hover:not(:disabled){border-color:var(--ac,#1A3F6E);color:var(--ac,#1A3F6E);}
+.jbtn:disabled{opacity:.25;cursor:not-allowed;}
+
+.screen{display:none;}.screen.on{display:block;}
+
+/* HOME */
+.home{max-width:720px;margin:0 auto;padding:2.5rem 1.25rem;}
+.cross{font-size:3rem;display:block;text-align:center;margin-bottom:.8rem;animation:sway 5s ease-in-out infinite;}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.htitle{font-family:'Lora',serif;font-size:2.6rem;font-weight:700;color:var(--t1);text-align:center;line-height:1.1;}
+.hsub{text-align:center;color:var(--sub);margin:.5rem 0 2rem;font-size:1rem;}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.5rem;}
+@media(max-width:480px){.tgrid{grid-template-columns:1fr;}}
+.tcard{background:#fff;border-radius:var(--radius);padding:1.3rem 1.5rem;cursor:pointer;border:2px solid transparent;transition:all .2s;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.tcard::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--tc);}
+.tcard:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(0,0,0,0.12);border-color:var(--tc);}
+.tcard.sel{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 5%,white);}
+.tcard .num{font-size:.7rem;font-weight:600;color:var(--tc);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;}
+.tcard .name{font-family:'Lora',serif;font-size:1rem;font-weight:700;}
+.tcard .cnt{font-size:.75rem;color:var(--sub);margin-top:.3rem;}
+.tcard .ck{position:absolute;top:.9rem;right:.9rem;width:20px;height:20px;border-radius:50%;background:var(--tc);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;}
+.tcard.sel .ck{display:flex;}
+.jinfo{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.jpill{padding:4px 11px;border-radius:99px;font-size:.73rem;font-weight:500;background:#fff;border:1px solid #DDD;color:var(--sub);}
+.allbtn{display:block;width:100%;padding:.95rem;background:var(--t1);color:#fff;border:none;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:600;cursor:pointer;margin-bottom:.7rem;box-shadow:0 3px 14px rgba(26,63,110,.28);transition:all .2s;}
+.allbtn:hover{background:#122C52;transform:translateY(-1px);}
+.selbtn{display:block;width:100%;padding:.9rem;background:#fff;color:var(--t1);border:2px solid var(--t1);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.selbtn:hover{background:var(--t1);color:#fff;}
+.selbtn:disabled{opacity:.35;cursor:not-allowed;}
+
+/* QUIZ */
+.qwrap{max-width:700px;margin:0 auto;padding:1.75rem 1.25rem;}
+.qmeta{display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem;flex-wrap:wrap;}
+.qbadge{font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:99px;color:#fff;background:var(--ac,#1A3F6E);}
+.qtybadge{font-size:.7rem;padding:3px 10px;border-radius:99px;background:#F0EBE3;color:var(--sub);font-weight:500;}
+.qno{font-size:.75rem;color:var(--sub);margin-left:auto;}
+.qcard{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.75rem;border-top:4px solid var(--ac,#1A3F6E);animation:fadeUp .28s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.qtxt{font-size:1.1rem;font-weight:500;line-height:1.55;margin-bottom:1.3rem;font-family:'Lora',serif;}
+.opts{display:flex;flex-direction:column;gap:.55rem;}
+.obtn{text-align:left;background:#F7F4EF;border:1.5px solid #E0DAD2;border-radius:10px;padding:.8rem 1rem;font-size:.95rem;cursor:pointer;display:flex;align-items:center;gap:.85rem;font-family:'DM Sans',sans-serif;color:var(--text);transition:all .13s;}
+.obtn:hover:not(:disabled){background:#EDE8E0;border-color:#CCC;transform:translateX(2px);}
+.oltr{min-width:26px;height:26px;border-radius:50%;background:#fff;border:1.5px solid #DDD;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;color:var(--sub);flex-shrink:0;}
+.obtn.ok{background:#D4EDD4;border-color:#1E5C1E;}.obtn.ok .oltr{background:#1E5C1E;color:#fff;border-color:#1E5C1E;}
+.obtn.ko{background:#F5D5D5;border-color:#7A1E1E;}.obtn.ko .oltr{background:#7A1E1E;color:#fff;border-color:#7A1E1E;}
+.obtn.rv{background:#D4EDD4;border-color:#1E5C1E;opacity:.6;}.obtn.rv .oltr{background:#1E5C1E;color:#fff;border-color:#1E5C1E;}
+.obtn:disabled{cursor:default;}
+.tfwrap{display:flex;gap:.7rem;}
+.tfbtn{flex:1;padding:.95rem;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;border:2px solid #E0DAD2;background:#F7F4EF;transition:all .15s;}
+.tfbtn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 3px 10px rgba(0,0,0,.1);}
+.tfbtn.r{border-color:#1E5C1E;color:#1E5C1E;}.tfbtn.f{border-color:#7A1E1E;color:#7A1E1E;}
+.tfbtn.ok{background:#D4EDD4;border-color:#1E5C1E;color:#1E5C1E;}
+.tfbtn.ko{background:#F5D5D5;border-color:#7A1E1E;color:#7A1E1E;}
+.tfbtn:disabled{cursor:default;}
+.fb{margin-top:1rem;padding:1rem 1.1rem;border-radius:10px;font-size:.9rem;line-height:1.58;display:none;}
+.fb.ok{background:#D4EDD4;color:#174017;border:1px solid #1E5C1E;}
+.fb.ko{background:#F5D5D5;color:#5A1010;border:1px solid #7A1E1E;}
+.nb{margin-top:1rem;padding:.75rem 2rem;border-radius:10px;background:var(--ac,#1A3F6E);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.93rem;font-weight:600;cursor:pointer;display:none;transition:all .2s;}
+.nb:hover{filter:brightness(1.12);}
+
+/* MATCH */
+.minstr{font-size:.82rem;color:var(--sub);margin-bottom:.9rem;font-style:italic;}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+@media(max-width:480px){.mgrid{grid-template-columns:1fr;}}
+.mcolhdr{font-size:.7rem;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.45rem;}
+.mleft,.mright{display:flex;flex-direction:column;gap:.45rem;}
+.mitem{background:#F7F4EF;border:1.5px solid #E0DAD2;border-radius:8px;padding:.65rem .9rem;font-size:.88rem;display:flex;align-items:center;gap:.55rem;}
+.mnum{min-width:22px;height:22px;border-radius:50%;background:var(--ac,#1A3F6E);color:#fff;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mopt{background:#fff;border:1.5px solid #DDD;border-radius:8px;padding:.65rem .9rem;font-size:.88rem;cursor:pointer;display:flex;align-items:center;gap:.55rem;font-family:'DM Sans',sans-serif;transition:all .13s;text-align:left;}
+.mopt:hover:not(:disabled):not(.sel){border-color:var(--ac,#1A3F6E);background:#F0EBE3;}
+.mopt.sel{border-color:var(--ac,#1A3F6E);background:color-mix(in srgb,var(--ac,#1A3F6E) 7%,white);}
+.mopt.ok{background:#D4EDD4;border-color:#1E5C1E;}
+.mopt.ko{background:#F5D5D5;border-color:#7A1E1E;}
+.mopt:disabled{cursor:default;}
+.mltr{min-width:22px;height:22px;border-radius:50%;background:#E0DAD2;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;}
+.mopt.sel .mltr,.mopt.ok .mltr{background:var(--ac,#1A3F6E);color:#fff;}
+.mopt.ko .mltr{background:#7A1E1E;color:#fff;}
+.msubmit{margin-top:.9rem;padding:.7rem 1.6rem;border-radius:10px;background:var(--ac,#1A3F6E);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;display:none;}
+
+/* RESULT */
+.rwrap{max-width:560px;margin:0 auto;padding:2.5rem 1.25rem;text-align:center;}
+.remo{font-size:3rem;display:block;margin-bottom:.75rem;animation:pop .5s ease;}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.rpct{font-family:'Lora',serif;font-size:4.2rem;font-weight:700;line-height:1;}
+.rlbl{font-size:1rem;color:var(--sub);margin:.4rem 0 1.8rem;}
+.rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1.5rem;}
+.rc{background:#fff;border-radius:var(--radius);padding:.9rem;box-shadow:var(--shadow);}
+.rc .v{font-family:'Lora',serif;font-size:1.7rem;font-weight:700;}
+.rc .l{font-size:.72rem;color:var(--sub);margin-top:2px;}
+.tscore{background:#fff;border-radius:var(--radius);padding:1.3rem;box-shadow:var(--shadow);margin-bottom:1.3rem;text-align:left;}
+.tshdr{font-size:.74rem;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.7rem;}
+.tsrow{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem;}
+.tsname{font-size:.82rem;min-width:120px;}
+.tsbar{flex:1;height:6px;background:#E0DAD2;border-radius:99px;overflow:hidden;}
+.tsinner{height:100%;border-radius:99px;transition:width 1s ease;}
+.tspct{font-size:.78rem;font-weight:600;min-width:34px;text-align:right;}
+.rbtn{display:inline-block;padding:.85rem 2.2rem;border-radius:var(--radius);background:var(--t1);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 3px 14px rgba(26,63,110,.22);margin:.3rem;}
+.rbtn:hover{background:#122C52;transform:translateY(-1px);}
+.hbtn{display:inline-block;padding:.85rem 2.2rem;border-radius:var(--radius);background:#fff;color:var(--t1);border:2px solid var(--t1);font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:600;cursor:pointer;transition:all .2s;margin:.3rem;}
+.hbtn:hover{background:var(--t1);color:#fff;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">✝ Christentum Quiz<span>Religionskunde KSM – Alessia</span></div>
+  <div class="pbar-wrap" id="topProg" style="display:none">
+    <div class="pbar"><div class="pfill" id="pFill"></div></div>
+    <div class="plbl" id="pLbl"></div>
+  </div>
+  <div class="joker-bar" id="jBar" style="display:none">
+    <button class="jbtn" id="jA" onclick="joker('fifty')">50/50</button>
+    <button class="jbtn" id="jB" onclick="joker('tipp')">Tipp</button>
+    <button class="jbtn" id="jC" onclick="joker('skip')">Überspringen</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="homeScr" class="screen on">
+  <div class="home">
+    <span class="cross">✝</span>
+    <h1 class="htitle">Christentum Quiz</h1>
+    <p class="hsub">4 Themen · MC, Richtig/Falsch & Zuordnung · 3 Joker</p>
+    <div class="jinfo">
+      <span class="jpill">🎯 50/50 — zwei Antworten ausblenden</span>
+      <span class="jpill">💡 Tipp — Hinweis anzeigen</span>
+      <span class="jpill">⏭ Überspringen</span>
+    </div>
+    <div class="tgrid">
+      <div class="tcard" style="--tc:var(--t1)" data-t="1" onclick="tog(1)">
+        <div class="num">Thema 1</div>
+        <div class="name">Jesus & christliche Feste</div>
+        <div class="cnt">16 Fragen</div>
+        <div class="ck">✓</div>
+      </div>
+      <div class="tcard" style="--tc:var(--t2)" data-t="2" onclick="tog(2)">
+        <div class="num">Thema 2</div>
+        <div class="name">Konfessionen & Grabeskirche</div>
+        <div class="cnt">16 Fragen</div>
+        <div class="ck">✓</div>
+      </div>
+      <div class="tcard" style="--tc:var(--t3)" data-t="3" onclick="tog(3)">
+        <div class="num">Thema 3</div>
+        <div class="name">Bibel & Evangelien</div>
+        <div class="cnt">16 Fragen</div>
+        <div class="ck">✓</div>
+      </div>
+      <div class="tcard" style="--tc:var(--t4)" data-t="4" onclick="tog(4)">
+        <div class="num">Thema 4</div>
+        <div class="name">Bibelübersetzungen</div>
+        <div class="cnt">12 Fragen</div>
+        <div class="ck">✓</div>
+      </div>
+    </div>
+    <button class="allbtn" onclick="go([1,2,3,4])">Alle Themen starten (60 Fragen)</button>
+    <button class="selbtn" id="selBtn" onclick="goSel()" disabled>Nur ausgewählte Themen starten</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quizScr" class="screen">
+  <div class="qwrap">
+    <div class="qmeta">
+      <span class="qbadge" id="qBadge"></span>
+      <span class="qtybadge" id="qType"></span>
+      <span class="qno" id="qNo"></span>
+    </div>
+    <div class="qcard" id="qCard">
+      <div class="qtxt" id="qTxt"></div>
+      <div id="qBody"></div>
+      <div class="fb" id="qFb"></div>
+      <button class="nb" id="nBtn" onclick="next()">Weiter →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="resScr" class="screen">
+  <div class="rwrap">
+    <span class="remo" id="rEmo"></span>
+    <div class="rpct" id="rPct"></div>
+    <div class="rlbl" id="rLbl"></div>
+    <div class="rgrid">
+      <div class="rc"><div class="v" id="rR" style="color:#1E5C1E"></div><div class="l">Richtig</div></div>
+      <div class="rc"><div class="v" id="rW" style="color:#7A1E1E"></div><div class="l">Falsch</div></div>
+      <div class="rc"><div class="v" id="rS"></div><div class="l">Beste Serie</div></div>
+    </div>
+    <div class="tscore" id="tScore"></div>
+    <button class="rbtn" onclick="replay()">Nochmal</button>
+    <button class="hbtn" onclick="goHome()">Zurück</button>
+  </div>
+</div>
+
+<script>
+const TC={1:'#1A3F6E',2:'#1E5C1E',3:'#7A1E1E',4:'#7A5000'};
+const TN={1:'Jesus & Feste',2:'Konfessionen',3:'Bibel & Evangelien',4:'Bibelübersetzungen'};
+
+const BANK=[
+  // ── THEMA 1 ──
+  {t:1,tp:'mc',q:"In welcher Stadt wurde Jesus historisch gesehen wahrscheinlich geboren?",o:["Bethlehem","Nazareth","Jerusalem","Kapernaum"],a:1,h:"Historisch: Nazareth in Galiläa. Im Glauben (Bibel) ist es Bethlehem."},
+  {t:1,tp:'mc',q:"Was bedeutet «Weihnachten» aus christlicher Glaubensperspektive?",o:["Erinnerung an die Taufe Jesu","Geburt des Sohnes Gottes in Bethlehem","Erinnerung an die Auferstehung","Sendung des Heiligen Geists"],a:1,h:"Weihnachten = Geburt Jesu Christi, des Sohnes Gottes, in Bethlehem (Glaubensperspektive)."},
+  {t:1,tp:'mc',q:"Was wird an Ostern gefeiert?",o:["Die Geburt Jesu","Die Taufe Jesu","Die Auferstehung Jesu","Die Sendung des Heiligen Geists"],a:2,h:"Ostern = Auferstehung Jesu Christi, 3 Tage nach seiner Kreuzigung."},
+  {t:1,tp:'mc',q:"Welches Fest findet 50 Tage nach Ostern statt?",o:["Auffahrt","Karfreitag","Pfingsten","Weihnachten"],a:2,h:"Pfingsten = Sendung des Heiligen Geists, 50 Tage nach Ostern."},
+  {t:1,tp:'mc',q:"Was war Jesus historisch gesehen von Beruf (gelernt vom Vater)?",o:["Fischer","Zimmermann","Schreiner","Priester"],a:1,h:"Josef lehrte Jesus das Zimmermannhandwerk – historisch gesichert."},
+  {t:1,tp:'mc',q:"Wer verurteilte Jesus historisch zum Tod?",o:["König Herodes","Der Hohepriester Kaiphas","Pontius Pilatus, der römische Statthalter","Kaiser Augustus"],a:2,h:"Pontius Pilatus = römischer Statthalter, der Jesus verurteilte. Historisch belegt."},
+  {t:1,tp:'tf',q:"Der historische Jesus war Jude und kannte die hebräische Bibel.",a:true,h:"Ja – Jesus war Jude, aufgewachsen in Nazareth, vertraut mit der hebräischen Bibel."},
+  {t:1,tp:'tf',q:"Die Bibel berichtet, dass Jesus in Nazareth geboren wurde.",a:false,h:"Die Bibel sagt Bethlehem. Historisch war es wahrscheinlich Nazareth."},
+  {t:1,tp:'tf',q:"Karfreitag erinnert an die Kreuzigung Jesu.",a:true,h:"Karfreitag = Gedenktag der Kreuzigung Jesu. «Kar» kommt von althochdeutsch «kara» = Trauer."},
+  {t:1,tp:'tf',q:"Auffahrt/Himmelfahrt findet 40 Tage nach Ostern statt.",a:true,h:"Himmelfahrt = 40 Tage nach Ostern. Pfingsten = 50 Tage nach Ostern."},
+  {t:1,tp:'mc',q:"Was ist der Unterschied zwischen «historischem Jesus» und «Jesus Christus»?",o:["Es sind zwei verschiedene Personen","Historischer Jesus = historische Fakten; Jesus Christus = Glaubensperspektive","Jesus Christus ist die moderne Bezeichnung","Der historische Jesus lebte früher"],a:1,h:"Historischer Jesus = was wir aus nicht-christlichen Quellen wissen. Jesus Christus = wie der Glaube ihn beschreibt (Sohn Gottes, Auferstehung usw.)."},
+  {t:1,tp:'mc',q:"Welche historische Quelle (nicht-christlich) erwähnt Jesus?",o:["Homer","Tacitus (röm. Historiker)","Platon","Herodot"],a:1,h:"Tacitus erwähnt Jesus in seinen «Annalen» (um 116 n. Chr.) im Zusammenhang mit den Christen in Rom."},
+  {t:1,tp:'tf',q:"Pfingsten erinnert an die Sendung des Heiligen Geists auf die Jünger Jesu.",a:true,h:"Pfingsten (griech. «Pentekoste» = 50. Tag) = Ausgiessung des Heiligen Geists über die Jünger."},
+  {t:1,tp:'tf',q:"Der historische Jesus hatte laut historischen Quellen keine Geschwister.",a:false,h:"Historisch hatte Jesus Brüder (z.B. Jakobus) und Schwestern – historisch belegt."},
+  {t:1,tp:'mc',q:"Was ist aus historischer Sicht über das Grab Jesu gesichert?",o:["Er liegt im Grab der Grabeskirche in Jerusalem","Die Grabstätte ist unbekannt","Er wurde in Bethlehem begraben","Er wurde in Nazareth begraben"],a:1,h:"Historisch: Die Grabstätte Jesu ist unbekannt. Die Grabeskirche ist eine christliche Überlieferung."},
+  {t:1,tp:'mc',q:"Welches Fest gedenkt dem Abendmahl Jesu mit seinen Jüngern?",o:["Karfreitag","Gründonnerstag","Ostern","Pfingsten"],a:1,h:"Gründonnerstag = Erinnerung an das letzte Abendmahl Jesu mit seinen Jüngern."},
+
+  // ── THEMA 2 ──
+  {t:2,tp:'mc',q:"Welche der vier Konfessionen gilt als die älteste und konservativste?",o:["Römisch-Katholisch","Evangelisch-Reformiert","Orthodox","Freikirchlich"],a:2,h:"Orthodox = trennte sich vor ~1000 Jahren von der röm.-kath. Kirche und will den Glauben wie in den ersten Jahrhunderten leben."},
+  {t:2,tp:'mc',q:"Wer steht an der Spitze der römisch-katholischen Kirche?",o:["Patriarch","Papst","Bischof","Priester"],a:1,h:"Der Papst in Rom ist das Oberhaupt der römisch-katholischen Kirche – nach kath. Glauben in Glaubensfragen unfehlbar."},
+  {t:2,tp:'mc',q:"Was sind «Ikonen» im orthodoxen Christentum?",o:["Heilige Texte","Bilder von Jesus, Maria oder Heiligen, die verehrt werden","Kerzenleuchter","Gebetsschals"],a:1,h:"Ikonen = religiöse Bilder, die geküsst, verehrt und mit Kerzen geehrt werden. Typisch orthodox."},
+  {t:2,tp:'mc',q:"Bei welcher Konfession steht die Predigt im Zentrum des Gottesdienstes?",o:["Orthodox","Römisch-Katholisch","Evangelisch-Reformiert","Alle gleich"],a:2,h:"Evangelisch-Reformiert = Predigt und Bibelauslegung stehen im Mittelpunkt. Demokratisch organisiert."},
+  {t:2,tp:'mc',q:"In welcher Konfession werden Mitglieder in der Regel erst als Erwachsene getauft (nach einer Bekehrungserfahrung)?",o:["Orthodox","Römisch-Katholisch","Evangelisch-Reformiert","Freikirchlich"],a:3,h:"Freikirchlich: Taufe ist ein bewusster Entscheid des Erwachsenen nach persönlicher Bekehrung."},
+  {t:2,tp:'mc',q:"Was bedeutet «Eucharistie» im Gottesdienst?",o:["Ein Gebet","Das Abendmahl / das Teilen von Brot und Wein","Die Taufe","Die Predigt"],a:1,h:"Eucharistie (griech. = Danksagung) = das Abendmahl, das Teilen von Brot und Wein zur Erinnerung an Jesus. Zentral im kath. Gottesdienst."},
+  {t:2,tp:'tf',q:"Orthodoxe Christen trennen sich vor rund 1000 Jahren von der röm.-kath. Kirche.",a:true,h:"Das Grosse Schisma 1054: Trennung zwischen West- (röm.-kath.) und Ostkirche (orthodox)."},
+  {t:2,tp:'tf',q:"Die evangelisch-reformierte Kirche finanziert sich ausschliesslich durch freiwillige Beiträge.",a:false,h:"In der Schweiz ist die ev.-reformierte Kirche eine Landeskirche und finanziert sich auch durch Kirchensteuern."},
+  {t:2,tp:'tf',q:"Die Grabeskirche in Jerusalem wird von genau 3 Konfessionen verwaltet.",a:false,h:"6 Konfessionen verwalten die Grabeskirche: griech.-orthodox, röm.-kath., armenisch-apostolisch, syrisch-orthodox, koptisch und äthiopisch-orthodox."},
+  {t:2,tp:'tf',q:"Zwei muslimische Familien verwalten seit Jahrhunderten den Schlüssel der Grabeskirche.",a:true,h:"Familie Joudeh = Schlüsselwächter; Familie Nusseibeh = öffnet/schliesst die Haupttür. Seit mindestens dem 12. Jahrhundert."},
+  {t:2,tp:'mc',q:"Was ist eine «Bilderwand» (Ikonostase) in der orthodoxen Kirche?",o:["Eine Wand mit Kirchenregeln","Eine Wand mit Ikonen, die den Altarbereich vom Gemeindebereich trennt","Ein Beichtstuhl","Die Eingangstür"],a:1,h:"Die Ikonostase trennt den heiligen Altarraum von der Gemeinde. Ein Teil der Rituale findet unsichtbar dahinter statt."},
+  {t:2,tp:'mc',q:"Was ist das Besondere an der Grabeskirche aus christlicher Überlieferung?",o:["Sie ist die älteste Kirche der Welt","Dort befinden sich der Ort der Kreuzigung und das Grab Jesu","Sie wurde von Jesus selbst gebaut","Sie ist das Zentrum des Papsttums"],a:1,h:"Nach christlicher Überlieferung: Dort wurde Jesus gekreuzigt und begraben – heiligster Ort des Christentums."},
+  {t:2,tp:'mc',q:"Welche Konfession hat keine zentrale Kirchenleitung und legt grossen Wert auf persönliche Bibellektüre?",o:["Orthodox","Römisch-Katholisch","Evangelisch-Reformiert","Alle gleich"],a:2,h:"Ev.-reformiert: demokratisch aufgebaut, jedes Mitglied liest selbst die Bibel. Kein zentrales Oberhaupt."},
+  {t:2,tp:'tf',q:"In der orthodoxen Kirche steht die Gemeinde während des Gottesdienstes.",a:true,h:"Orthodox: Die Gemeinde steht meist während des Gottesdienstes (keine Bänke). Gottesdienst ist feierlich und oft länger."},
+  {t:2,tp:'tf',q:"Freikirchen sind demokratisch aufgebaut und finanzieren sich durch freiwillige Beiträge.",a:true,h:"Freikirchen: keine staatliche Anbindung, freiwillige Mitgliedschaft und Finanzierung."},
+  {t:2,tp:'mc',q:"Was ist das «Schisma» von 1054?",o:["Die Entstehung der Freikirchen","Die Trennung in römisch-katholische und orthodoxe Kirche","Die Reformation durch Zwingli","Die Gründung der Grabeskirche"],a:1,h:"Das Grosse Schisma 1054 = Spaltung der Kirche in die westliche (röm.-kath.) und östliche (orthodox) Kirche."},
+
+  // ── THEMA 3 ──
+  {t:3,tp:'mc',q:"Wie viele Bücher hat das Neue Testament?",o:["46","24","27","39"],a:2,h:"Das Neue Testament hat 27 Bücher. Das Alte Testament hat je nach Konfession 39 (protestantisch) oder 46 (katholisch) Bücher."},
+  {t:3,tp:'mc',q:"In welcher Sprache wurde das Neue Testament ursprünglich geschrieben?",o:["Lateinisch","Hebräisch","Aramäisch","Griechisch"],a:3,h:"NT = Griechisch (die damalige Weltsprache im Mittelmeerraum). Das AT = hauptsächlich Hebräisch/Aramäisch."},
+  {t:3,tp:'mc',q:"Was ist der «Kanon» der Bibel?",o:["Ein griechisches Musikstück","Die Gesamtheit der heiligen Schriften, die eine Glaubensgemeinschaft als verbindlich anerkennt","Ein Bibelabschnitt über Jesus","Der Altar in der Kirche"],a:1,h:"Kanon (griech. = Richtschnur) = die Sammlung von Schriften, die als heilig und verbindlich gilt."},
+  {t:3,tp:'mc',q:"Wann wurde endgültig festgelegt, welche Bücher zum Neuen Testament gehören?",o:["Zur Zeit Jesu, im 1. Jh. n. Chr.","Im 2. Jh. n. Chr.","Im 4. Jh. n. Chr.","Im 16. Jh. n. Chr."],a:2,h:"Erst im 4. Jahrhundert n. Chr. wurde der Kanon des NT endgültig festgelegt."},
+  {t:3,tp:'mc',q:"Welche drei Evangelien nennt man «synoptisch»?",o:["Matthäus, Markus, Johannes","Markus, Lukas, Johannes","Matthäus, Markus, Lukas","Matthäus, Lukas, Johannes"],a:2,h:"Synoptisch = Mt, Mk, Lk. «Synoptisch» = man kann sie «zusammensehen», da sie sehr ähnlich sind."},
+  {t:3,tp:'mc',q:"Welches ist das älteste Evangelium?",o:["Matthäus","Markus","Lukas","Johannes"],a:1,h:"Markus ist das älteste Evangelium. Matthäus und Lukas haben es als Quelle benutzt."},
+  {t:3,tp:'mc',q:"Was ist die «Spruchquelle Q»?",o:["Ein verlorenes Evangelium voller Wunder","Eine hypothetische Quelle mit Jesusworten, von Matthäus und Lukas benutzt","Das älteste Evangelium","Ein Teil des Johannesevangeliums"],a:1,h:"Q = Quelle (deutsch) oder Quelle (lat. «Quelle»). Enthält nur Jesusworte/-sprüche, keine Wundergeschichten."},
+  {t:3,tp:'mc',q:"Was ist das «Sondergut» bei Matthäus oder Lukas?",o:["Stellen, die nur bei Markus vorkommen","Stellen, die nur bei einem Evangelisten vorkommen und weder bei Markus noch in Q stehen","Der geheime Teil der Bibel","Schriften, die nicht in den Kanon aufgenommen wurden"],a:1,h:"Sondergut = Material, das nur bei einem Evangelisten vorkommt (weder aus Markus noch aus Q)."},
+  {t:3,tp:'tf',q:"Der Tanach der Juden und das Alte Testament der Christen sind inhaltlich weitgehend identisch.",a:true,h:"Ja – das AT der Christen entspricht inhaltlich dem Tanach. Den Namen «Altes Testament» gaben Christen, als sie das NT hinzufügten."},
+  {t:3,tp:'tf',q:"Die Botschaft Jesu wurde zuerst schriftlich, dann mündlich weitergegeben.",a:false,h:"Umgekehrt: Erst mündlich überliefert, dann schriftlich festgehalten (auf Griechisch)."},
+  {t:3,tp:'tf',q:"Das Thomasevangelium gehört zum offiziellen Kanon des Neuen Testaments.",a:false,h:"Nein – das Thomasevangelium wurde im 4. Jh. NICHT in den Kanon aufgenommen. Es gilt als apokryph."},
+  {t:3,tp:'tf',q:"Die Synopse ist eine Methode, bei der man mehrere Evangelien nebeneinander vergleicht.",a:true,h:"Synopse (griech. = Zusammenschau) = die drei synopt. Evangelien werden spaltenweise nebeneinander verglichen."},
+  {t:3,tp:'mc',q:"Was bedeutet «Evangelium»?",o:["Gutes Buch","Heilige Schrift","Gute Botschaft / Gute Nachricht","Gottes Wort"],a:2,h:"Evangelium (griech. «euangelion») = Gute Botschaft / Gute Nachricht. Die Kernbotschaft Jesu."},
+  {t:3,tp:'mc',q:"Was enthält das Neue Testament ausser den 4 Evangelien?",o:["Nur Briefe des Paulus","Apostelgeschichte, Briefe und die Offenbarung","Nur Geschichte Israels","Psalmen und Weisheitsbücher"],a:1,h:"NT: 4 Evangelien + Apostelgeschichte + Briefe (u.a. von Paulus) + Offenbarung des Johannes."},
+  {t:3,tp:'mc',q:"Was ist die «Apostelgeschichte»?",o:["Ein Buch über die Taufe Jesu","Ein Buch über die Entstehung der ersten christlichen Gemeinden","Ein Buch über die Propheten","Das 5. Evangelium"],a:1,h:"Apostelgeschichte = Bericht über die Entstehung und Ausbreitung der ersten christlichen Gemeinden nach Jesu Tod."},
+  {t:3,tp:'tf',q:"Das Wort «Bibel» kommt vom griechischen «Biblia», was «Bücher» bedeutet.",a:true,h:"Biblia (griech.) = Bücher. Die Bibel ist also eigentlich eine «Bücherbibliothek» von verschiedenen Autoren."},
+
+  // ── THEMA 4 ──
+  {t:4,tp:'mc',q:"Warum können verschiedene Bibelübersetzungen voneinander abweichen?",o:["Weil die Autoren lügen","Weil manche Wörter keine direkte Entsprechung haben und Übersetzer Entscheidungen treffen müssen","Weil die Bibel mehrfach neu geschrieben wurde","Weil die Originale verloren gingen"],a:1,h:"Übersetzen = interpretieren. Verschiedene Entscheidungen (welches Wort? welcher Stil?) führen zu verschiedenen Übersetzungen."},
+  {t:4,tp:'mc',q:"In welchen Sprachen wurde die christliche Bibel ursprünglich geschrieben?",o:["Lateinisch und Griechisch","Hebräisch/Aramäisch (AT) und Griechisch (NT)","Nur Hebräisch","Latein und Aramäisch"],a:1,h:"AT: Hebräisch und Aramäisch. NT: Griechisch. Die Vulgata (Latein) ist eine frühe Übersetzung."},
+  {t:4,tp:'mc',q:"Wie beschreibt die Lutherbibel die Schlange in der Eden-Geschichte?",o:["Listig","Klug","Schlau","Weise"],a:2,h:"Lutherbibel: «schlau». Einheitsübersetzung: «listig». Gute Nachricht: «klüger». Alle haben leicht unterschiedliche Bedeutungen."},
+  {t:4,tp:'mc',q:"Wann wurden die Bücher der Bibel in Kapitel und Verse eingeteilt?",o:["Zur Zeit Jesu","Erst Jahrhunderte nach ihrer Entstehung","Im 4. Jh. n. Chr. gleichzeitig mit dem Kanon","In der Reformation"],a:1,h:"Die Einteilung in Kapitel und Verse erfolgte erst einige Jahrhunderte nach der Entstehung der Texte – zur leichteren Orientierung."},
+  {t:4,tp:'tf',q:"Alle Bibelübersetzungen gehen auf denselben Urtext zurück.",a:true,h:"Ja – trotz aller Unterschiede in Stil und Wortwahl gehen alle Übersetzungen letztlich auf die hebräischen und griechischen Urtexte zurück."},
+  {t:4,tp:'tf',q:"Es gibt nur eine «richtige» Bibelübersetzung, alle anderen sind falsch.",a:false,h:"Nein – es gibt keine «richtige» Übersetzung. Jede hat Stärken und ist für ihren Zweck (wörtlich, verständlich, poetisch) geeignet."},
+  {t:4,tp:'mc',q:"Was ist die «Einheitsübersetzung»?",o:["Die erste lateinische Bibelübersetzung","Eine ökumenische Übersetzung, die von kath. und ev. Kirchen gemeinsam verwendet wird","Eine wörtliche Übersetzung","Die Übersetzung von Martin Luther"],a:1,h:"Einheitsübersetzung = gemeinsame Bibelübersetzung der kath. und ev. Kirchen im deutschsprachigen Raum."},
+  {t:4,tp:'mc',q:"Was ist das «Sondergut» eines Übersetzers?",o:["Besondere Übersetzungsfehler","Textstellen, die er hinzugefügt hat","Übersetzungsentscheidungen, die den Text von anderen Versionen unterscheiden, z.B. Wortwahl und Stil","Die einleitende Notiz"],a:2,h:"Jeder Übersetzer trifft eigene Entscheidungen: welches Wort, welcher Stil, welche Betonung – das prägt die «Handschrift» einer Übersetzung."},
+  {t:4,tp:'tf',q:"Die «Gute Nachricht»-Übersetzung ist bewusst in einfacherer Sprache verfasst.",a:true,h:"Ja – die «Gute Nachricht» zielt auf gute Verständlichkeit im modernen Deutsch, weniger auf wörtliche Nähe zum Urtext."},
+  {t:4,tp:'mc',q:"Was erleichtert die Einteilung der Bibel in Kapitel und Verse?",o:["Das Auswendiglernen ganzer Texte","Das Auffinden von Bibelstellen unabhängig von Seitenzahlen","Das Lesen der Bibel auf Griechisch","Das Schreiben neuer Bücher"],a:1,h:"Kapitel und Verse erlauben es, jede Stelle eindeutig zu nennen (z.B. Gen 3,1) unabhängig von Ausgabe oder Seitenzahl."},
+  {t:4,tp:'tf',q:"Die Lutherbibel verwendet manchmal altertümliche Ausdrücke, die im modernen Deutsch ungewöhnlich sind.",a:true,h:"Ja – z.B. «Weib» statt «Frau». Die Lutherbibel stammt aus dem 16. Jh. und klingt deshalb manchmal archaisch."},
+  {t:4,tp:'mc',q:"Was bedeutet, wenn eine Bibelübersetzung «wörtlich» ist?",o:["Sie ist kürzer als andere","Sie folgt dem Urtext möglichst genau, auch wenn das ungewöhnlich klingt","Sie ist für Kinder geschrieben","Sie enthält keine Anmerkungen"],a:1,h:"Wörtliche Übersetzung = möglichst nahe am Originaltext. Kann sich weniger flüssig lesen, ist aber präziser."},
+];
+
+const MATCHES=[
+  {t:1,tp:'match',q:"Ordne die christlichen Feste der richtigen Beschreibung zu:",
+    pairs:[["Weihnachten","Geburt Jesu in Bethlehem"],["Karfreitag","Kreuzigung und Tod Jesu"],["Ostern","Auferstehung Jesu (3 Tage nach Kreuzigung)"],["Auffahrt","Himmelfahrt Jesu (40 Tage nach Ostern)"],["Pfingsten","Sendung des Heiligen Geists (50 Tage nach Ostern)"]],
+    h:"Die 5 wichtigsten christlichen Feste sind alle mit dem Leben Jesu Christi verbunden."},
+  {t:2,tp:'match',q:"Ordne die Merkmale der richtigen Konfession zu:",
+    pairs:[["Orthodox","Ikonen spielen grosse Rolle; Patriarch an der Spitze"],["Römisch-Kath.","Papst als unfehlbares Oberhaupt; Eucharistie zentral"],["Ev.-reformiert","Predigt im Zentrum; demokratisch organisiert"],["Freikirchlich","Taufe als Erwachsener; wörtliche Bibellektüre"],["Grabeskirche","Von 6 Konfessionen verwaltet; in Jerusalem"]],
+    h:"Jede Konfession hat eigene Merkmale, trotz gemeinsamer Wurzeln im Glauben an Jesus Christus."},
+  {t:3,tp:'match',q:"Zwei-Quellen-Theorie: Ordne die Begriffe ihrer Erklärung zu:",
+    pairs:[["Markus","Ältestes Evangelium; Quelle für Mt und Lk"],["Spruchquelle Q","Hypothetische Quelle mit Jesusworten; von Mt und Lk benutzt"],["Synoptisch","Mt, Mk, Lk; können in einer Synopse verglichen werden"],["Sondergut","Material, das nur bei einem Evangelisten vorkommt"],["Johannes","Nicht synoptisch; eigenständiges Evangelium"]],
+    h:"Die Zwei-Quellen-Theorie erklärt, warum Mt, Mk und Lk so ähnlich sind."},
+  {t:4,tp:'match',q:"Ordne die Bibelübersetzungen ihrem Merkmal zu:",
+    pairs:[["Lutherbibel","Älteste bedeutende dt. Übersetzung; manchmal altertümlicher Stil"],["Einheitsübersetzung","Ökumenisch (kath.+ev.); «listig» für die Schlange"],["Gute Nachricht","Sehr verständlich; «klüger» für die Schlange"],["Kapitel & Verse","Einteilung zur leichten Orientierung; erst Jahrhunderte nach Entstehung"],["Urtext","Alle Übersetzungen gehen darauf zurück (Hebr./Aram./Griech.)"]],
+    h:"Verschiedene Übersetzungen haben verschiedene Ziele – es gibt keine einzig «richtige» Übersetzung."},
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────────
+let sel=new Set(), questions=[], cur=0, right=0, wrong=0, bestS=0, curS=0;
+let jokers={fifty:false,tipp:false,skip:false}, answered=false;
+let tStats={1:{c:0,t:0},2:{c:0,t:0},3:{c:0,t:0},4:{c:0,t:0}};
+let mLeftSel=null, mPairs={}, replay_topics=[];
+
+function tog(t){
+  const c=document.querySelector(`.tcard[data-t="${t}"]`);
+  if(sel.has(t)){sel.delete(t);c.classList.remove('sel');}
+  else{sel.add(t);c.classList.add('sel');}
+  document.getElementById('selBtn').disabled=sel.size===0;
+}
+function goSel(){if(sel.size>0)go([...sel]);}
+function go(topics){
+  replay_topics=topics;
+  const pool=[...BANK.filter(q=>topics.includes(q.t)),...MATCHES.filter(q=>topics.includes(q.t))];
+  questions=shuf(pool);
+  cur=0;right=0;wrong=0;bestS=0;curS=0;jokers={fifty:false,tipp:false,skip:false};answered=false;
+  tStats={1:{c:0,t:0},2:{c:0,t:0},3:{c:0,t:0},4:{c:0,t:0}};
+  document.getElementById('topProg').style.display='block';
+  document.getElementById('jBar').style.display='flex';
+  show('quizScr'); renderQ();
+}
+function shuf(a){return[...a].sort(()=>Math.random()-.5);}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
+function setAC(t){document.documentElement.style.setProperty('--ac',TC[t]);}
+
+function renderQ(){
+  answered=false; mLeftSel=null; mPairs={};
+  const q=questions[cur];
+  setAC(q.t);
+  const pct=cur/questions.length*100;
+  document.getElementById('pFill').style.width=pct+'%';
+  document.getElementById('pFill').style.background=TC[q.t];
+  document.getElementById('pLbl').textContent=`${cur+1} / ${questions.length}`;
+  document.getElementById('jA').disabled=jokers.fifty;
+  document.getElementById('jB').disabled=jokers.tipp;
+  document.getElementById('jC').disabled=jokers.skip;
+  const b=document.getElementById('qBadge');
+  b.textContent=`Thema ${q.t}: ${TN[q.t]}`; b.style.background=TC[q.t];
+  document.getElementById('qType').textContent=q.tp==='mc'?'Multiple Choice':q.tp==='tf'?'Richtig / Falsch':'Zuordnung';
+  document.getElementById('qNo').textContent=`Frage ${cur+1} von ${questions.length}`;
+  document.getElementById('qTxt').textContent=q.q;
+  const fb=document.getElementById('qFb'); fb.style.display='none'; fb.className='fb';
+  document.getElementById('nBtn').style.display='none';
+  const body=document.getElementById('qBody'); body.innerHTML='';
+  if(q.tp==='mc')renderMC(q,body);
+  else if(q.tp==='tf')renderTF(q,body);
+  else renderMatch(q,body);
+}
+
+function renderMC(q,body){
+  const d=document.createElement('div'); d.className='opts';
+  ['A','B','C','D'].forEach((l,i)=>{
+    const b=document.createElement('button'); b.className='obtn';
+    b.innerHTML=`<span class="oltr">${l}</span><span>${q.o[i]}</span>`;
+    b.onclick=()=>pickMC(i,q); d.appendChild(b);
+  });
+  body.appendChild(d);
+}
+function pickMC(idx,q){
+  if(answered)return; answered=true;
+  document.querySelectorAll('.obtn').forEach(b=>b.disabled=true);
+  const ok=idx===q.a;
+  document.querySelectorAll('.obtn')[idx].classList.add(ok?'ok':'ko');
+  if(!ok)document.querySelectorAll('.obtn')[q.a].classList.add('rv');
+  rec(ok,q); fb(ok,q.h);
+}
+
+function renderTF(q,body){
+  const d=document.createElement('div'); d.className='tfwrap';
+  ['Richtig','Falsch'].forEach((l,i)=>{
+    const b=document.createElement('button'); b.className='tfbtn '+(i===0?'r':'f');
+    b.textContent=l; b.onclick=()=>pickTF(i===0,q,d); d.appendChild(b);
+  });
+  body.appendChild(d);
+}
+function pickTF(val,q,wrap){
+  if(answered)return; answered=true;
+  wrap.querySelectorAll('.tfbtn').forEach(b=>b.disabled=true);
+  const ok=val===q.a;
+  if(ok){wrap.children[val?0:1].classList.add('ok');}
+  else{wrap.children[val?0:1].classList.add('ko'); wrap.children[q.a?0:1].classList.add('ok');}
+  rec(ok,q); fb(ok,q.h);
+}
+
+function renderMatch(q,body){
+  const shufDefs=shuf(q.pairs.map(p=>p[1]));
+  body.innerHTML='<p class="minstr">Klicke zuerst auf einen Begriff (links), dann auf die passende Beschreibung (rechts).</p>';
+  const grid=document.createElement('div'); grid.className='mgrid';
+  const lc=document.createElement('div');
+  lc.innerHTML='<div class="mcolhdr">Begriff</div>';
+  const ll=document.createElement('div'); ll.className='mleft';
+  q.pairs.forEach((p,i)=>{
+    const el=document.createElement('div'); el.className='mitem'; el.dataset.i=i;
+    el.innerHTML=`<span class="mnum">${i+1}</span><span>${p[0]}</span>`;
+    el.onclick=()=>mSelLeft(i,el,ll); ll.appendChild(el);
+  }); lc.appendChild(ll);
+  const rc=document.createElement('div');
+  rc.innerHTML='<div class="mcolhdr">Beschreibung</div>';
+  const rl=document.createElement('div'); rl.className='mright';
+  shufDefs.forEach((d,i)=>{
+    const btn=document.createElement('button'); btn.className='mopt'; btn.dataset.def=d;
+    btn.innerHTML=`<span class="mltr">${String.fromCharCode(65+i)}</span><span>${d}</span>`;
+    btn.onclick=()=>mSelRight(d,btn,q,ll,rl); rl.appendChild(btn);
+  }); rc.appendChild(rl);
+  grid.appendChild(lc); grid.appendChild(rc); body.appendChild(grid);
+  const sub=document.createElement('button'); sub.className='msubmit'; sub.id='mSub';
+  sub.textContent='Auflösung anzeigen';
+  sub.onclick=()=>submitMatch(q,ll,rl); body.appendChild(sub);
+}
+function mSelLeft(i,el,ll){
+  if(answered)return;
+  ll.querySelectorAll('.mitem').forEach(e=>{e.style.background='';e.style.borderColor='';});
+  mLeftSel=i; el.style.background='color-mix(in srgb,var(--ac) 12%,white)'; el.style.borderColor='var(--ac)';
+}
+function mSelRight(def,btn,q,ll,rl){
+  if(answered||mLeftSel===null)return;
+  mPairs[mLeftSel]=def;
+  ll.querySelectorAll('.mitem').forEach(e=>{e.style.background='';e.style.borderColor='';});
+  rl.querySelectorAll('.mopt').forEach(e=>e.classList.remove('sel'));
+  Object.keys(mPairs).forEach(k=>{
+    ll.children[k].style.background='color-mix(in srgb,var(--ac) 10%,white)';
+    ll.children[k].style.borderColor='var(--ac)';
+    rl.querySelectorAll('.mopt').forEach(e=>{if(e.dataset.def===mPairs[k])e.classList.add('sel');});
+  });
+  mLeftSel=null;
+  if(Object.keys(mPairs).length===q.pairs.length)document.getElementById('mSub').style.display='block';
+}
+function submitMatch(q,ll,rl){
+  answered=true; document.getElementById('mSub').style.display='none';
+  let allOk=true;
+  q.pairs.forEach((p,i)=>{
+    const ok=mPairs[i]===p[1]; if(!ok)allOk=false;
+    ll.children[i].style.background=ok?'#D4EDD4':'#F5D5D5';
+    ll.children[i].style.borderColor=ok?'#1E5C1E':'#7A1E1E';
+    rl.querySelectorAll('.mopt').forEach(e=>{
+      if(e.dataset.def===p[1]){e.classList.remove('sel');e.classList.add('ok');e.disabled=true;}
+      else if(e.dataset.def===mPairs[i]&&!ok){e.classList.remove('sel');e.classList.add('ko');e.disabled=true;}
+      else e.disabled=true;
+    });
+  });
+  rec(allOk,q); fb(allOk,q.h);
+}
+
+function rec(ok,q){
+  tStats[q.t].t++;
+  if(ok){right++;curS++;if(curS>bestS)bestS=curS;tStats[q.t].c++;}
+  else{wrong++;curS=0;}
+}
+function fb(ok,hint){
+  const f=document.getElementById('qFb'); f.style.display='block';
+  f.className='fb '+(ok?'ok':'ko');
+  f.textContent=(ok?'✓ Richtig! ':'✗ Leider falsch. ')+hint;
+  document.getElementById('nBtn').style.display='block';
+}
+function next(){cur++;if(cur>=questions.length)showResult();else renderQ();}
+
+function joker(type){
+  if(jokers[type]||answered)return; jokers[type]=true;
+  const q=questions[cur];
+  if(type==='fifty'){
+    document.getElementById('jA').disabled=true;
+    if(q.tp==='mc'){const w=shuf([0,1,2,3].filter(i=>i!==q.a)).slice(0,2);document.querySelectorAll('.obtn').forEach((b,i)=>{if(w.includes(i)){b.style.opacity='.15';b.disabled=true;}});}
+  } else if(type==='tipp'){
+    document.getElementById('jB').disabled=true;
+    const f=document.getElementById('qFb');f.style.display='block';f.className='fb ok';f.textContent='💡 Tipp: '+q.h;
+  } else {
+    document.getElementById('jC').disabled=true;
+    cur++;if(cur>=questions.length){showResult();return;}renderQ();
+  }
+}
+
+function showResult(){
+  show('resScr');
+  document.getElementById('topProg').style.display='none';
+  document.getElementById('jBar').style.display='none';
+  const tot=right+wrong, pct=tot>0?Math.round(right/tot*100):0;
+  document.getElementById('rEmo').textContent=pct>=90?'🏆':pct>=75?'⭐':pct>=50?'👍':'💪';
+  document.getElementById('rPct').textContent=pct+'%';
+  document.getElementById('rPct').style.color=pct>=75?'#1E5C1E':pct>=50?'#7A5000':'#7A1E1E';
+  document.getElementById('rLbl').textContent=pct>=90?'Ausgezeichnet – bereit für die Prüfung!':pct>=75?'Sehr gut! Noch etwas üben.':pct>=50?'Gut begonnen – schau die Zusammenfassung nochmal an.':'Weiter üben – du schaffst das!';
+  document.getElementById('rR').textContent=right;
+  document.getElementById('rW').textContent=wrong;
+  document.getElementById('rS').textContent=bestS;
+  let html='<div class="tshdr">Ergebnis pro Thema</div>';
+  [1,2,3,4].forEach(t=>{
+    const s=tStats[t]; if(!s.t)return;
+    const p=Math.round(s.c/s.t*100);
+    html+=`<div class="tsrow"><div class="tsname" style="font-size:.8rem">Thema ${t}</div><div class="tsbar"><div class="tsinner" style="width:${p}%;background:${TC[t]}"></div></div><div class="tspct" style="color:${TC[t]}">${p}%</div></div>`;
+  });
+  document.getElementById('tScore').innerHTML=html;
+}
+function replay(){go(replay_topics);}
+function goHome(){show('homeScr');document.getElementById('topProg').style.display='none';document.getElementById('jBar').style.display='none';}
+</script>
+</body>
+</html>
